@@ -1,0 +1,13 @@
+{
+  "name": "sidecar",
+  "owner": {
+    "name": "magine"
+  },
+  "plugins": [
+    {
+      "name": "sidecar",
+      "source": "./",
+      "description": "On-demand Docker infrastructure containers for local development."
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   "name": "sidecar",
   "version": "0.1.0",
   "description": "On-demand Docker infrastructure containers for local development. Starts postgres, redis, mongo, kafka, and rabbitmq on demand — Claude learns connection strings automatically.",
-  "author": "magine",
+  "author": {"name": "magine"},
   "skills": ["./skills/"],
   "hooks": "./hooks/hooks.json"
 }
