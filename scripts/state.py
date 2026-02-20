@@ -19,7 +19,8 @@ CONTAINER_PORTS = {
 }
 
 def project_hash():
-    return hashlib.md5(os.getcwd().encode()).hexdigest()[:6]
+    d = os.environ.get("CLAUDE_PROJECT_DIR") or os.getcwd()
+    return hashlib.md5(d.encode()).hexdigest()[:6]
 
 def resolve_port(name, cport):
     try:

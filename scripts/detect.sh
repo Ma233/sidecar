@@ -3,7 +3,7 @@
 set -euo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
-PROJECT_HASH=$(echo "$PWD" | md5sum | cut -c1-6)
+PROJECT_HASH=$(echo "${CLAUDE_PROJECT_DIR:-$PWD}" | md5sum | cut -c1-6)
 
 echo "[sidecar/detect] Project: $(basename "$PWD") (hash: $PROJECT_HASH)"
 echo ""

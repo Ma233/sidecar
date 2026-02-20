@@ -7,7 +7,7 @@ TARGET="${1:-}"
 FORCE=false
 [[ "${2:-}" == "--force" ]] && FORCE=true
 
-PROJECT_HASH=$(echo "$PWD" | md5sum | cut -c1-6)
+PROJECT_HASH=$(echo "${CLAUDE_PROJECT_DIR:-$PWD}" | md5sum | cut -c1-6)
 
 stop_one() {
   local name="$1"

@@ -13,7 +13,7 @@ if [[ -z "$SERVICE" ]]; then
   exit 1
 fi
 
-PROJECT_HASH=$(echo "$PWD" | md5sum | cut -c1-6)
+PROJECT_HASH=$(echo "${CLAUDE_PROJECT_DIR:-$PWD}" | md5sum | cut -c1-6)
 
 case "$SERVICE" in
   pg|postgres|postgresql) SERVICE="postgres" ;;
