@@ -162,11 +162,11 @@ All state lives in Docker container labels — nothing written to the project di
 
 | Service           | Image                          | Container Port | Primary Env Var           |
 | ----------------- | ------------------------------ | -------------- | ------------------------- |
-| `postgres` / `pg` | `postgres:16-alpine`           | 5432           | `DATABASE_URL`            |
-| `redis`           | `redis:7-alpine`               | 6379           | `REDIS_URL`               |
-| `mongo`           | `mongo:7`                      | 27017          | `MONGODB_URL`             |
-| `kafka`           | `confluentinc/cp-kafka:7.6.0`  | 9092           | `KAFKA_BOOTSTRAP_SERVERS` |
-| `rabbitmq`        | `rabbitmq:3-management-alpine` | 5672           | `AMQP_URL`                |
+| `postgres` / `pg` | `postgres:18-alpine`           | 5432           | `DATABASE_URL`            |
+| `redis`           | `redis:8-alpine`               | 6379           | `REDIS_URL`               |
+| `mongo`           | `mongo:8`                      | 27017          | `MONGODB_URL`             |
+| `kafka`           | `confluentinc/cp-kafka:7.9.5`  | 9092           | `KAFKA_BOOTSTRAP_SERVERS` |
+| `rabbitmq`        | `rabbitmq:4-management-alpine` | 5672           | `AMQP_URL`                |
 
 **RabbitMQ**: also exposes a management UI on a random host port; printed as
 `RABBITMQ_MGMT_URL` (credentials: sidecar / sidecar).

@@ -58,11 +58,11 @@ Just talk to Claude naturally:
 
 | Service    | Aliases            | Primary env var           | Image                          |
 | ---------- | ------------------ | ------------------------- | ------------------------------ |
-| `postgres` | `pg`, `postgresql` | `DATABASE_URL`            | `postgres:16-alpine`           |
-| `redis`    | —                  | `REDIS_URL`               | `redis:7-alpine`               |
-| `mongo`    | `mongodb`          | `MONGODB_URL`             | `mongo:7`                      |
-| `kafka`    | —                  | `KAFKA_BOOTSTRAP_SERVERS` | `confluentinc/cp-kafka:7.6.0`  |
-| `rabbitmq` | `rabbit`           | `AMQP_URL`                | `rabbitmq:3-management-alpine` |
+| `postgres` | `pg`, `postgresql` | `DATABASE_URL`            | `postgres:18-alpine`           |
+| `redis`    | —                  | `REDIS_URL`               | `redis:8-alpine`               |
+| `mongo`    | `mongodb`          | `MONGODB_URL`             | `mongo:8`                      |
+| `kafka`    | —                  | `KAFKA_BOOTSTRAP_SERVERS` | `confluentinc/cp-kafka:7.9.5`  |
+| `rabbitmq` | `rabbit`           | `AMQP_URL`                | `rabbitmq:4-management-alpine` |
 
 Default credentials for all services: user=`sidecar`, password=`sidecar`, db=`sidecar`.
 

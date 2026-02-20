@@ -66,7 +66,7 @@ case "$SERVICE" in
       -p 0:5432 \
       --health-cmd "pg_isready -U sidecar -d sidecar" \
       --health-interval 2s --health-retries 15 \
-      postgres:16-alpine
+      postgres:18-alpine
     ;;
 
   redis)
@@ -75,7 +75,7 @@ case "$SERVICE" in
       -p 0:6379 \
       --health-cmd "redis-cli ping" \
       --health-interval 2s --health-retries 10 \
-      redis:7-alpine redis-server --save "" --appendonly no
+      redis:8-alpine redis-server --save "" --appendonly no
     ;;
 
   mongo)
@@ -85,11 +85,11 @@ case "$SERVICE" in
       -p 0:27017 \
       --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")' --quiet" \
       --health-interval 3s --health-retries 15 \
-      mongo:7
+      mongo:8
     ;;
 
   kafka)
-    CLUSTER_ID=$(docker run --rm confluentinc/cp-kafka:7.6.0 \
+    CLUSTER_ID=$(docker run --rm confluentinc/cp-kafka:7.9.5 \
       kafka-storage random-uuid 2>/dev/null || echo "sidecar-kafka-$(date +%s)")
     KAFKA_HOST_PORT=$(pick_free_port)
     CTRL_HOST_PORT=$(pick_free_port)
@@ -105,7 +105,7 @@ case "$SERVICE" in
       -e KAFKA_LOG_DIRS=/tmp/kraft-combined-logs \
       -e CLUSTER_ID="$CLUSTER_ID" \
       -p "${KAFKA_HOST_PORT}:9092" -p "${CTRL_HOST_PORT}:9093" \
-      confluentinc/cp-kafka:7.6.0
+      confluentinc/cp-kafka:7.9.5
     ;;
 
   rabbitmq)
@@ -114,7 +114,7 @@ case "$SERVICE" in
       -p 0:5672 -p 0:15672 \
       --health-cmd "rabbitmq-diagnostics -q ping" \
       --health-interval 5s --health-retries 10 \
-      rabbitmq:3-management-alpine
+      rabbitmq:4-management-alpine
     # mgmt_port resolved after container is up; store via meta override file
     ;;
 esac
