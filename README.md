@@ -19,7 +19,11 @@ A [Claude Code](https://github.com/anthropics/claude-code) plugin that manages o
 ## Installation
 
 ```bash
-claude plugin install https://github.com/ma233/sidecar
+# Step 1: Add the marketplace
+/plugin marketplace add ma233/sidecar
+
+# Step 2: Install the plugin
+/plugin install sidecar@sidecar
 ```
 
 Or install from a local clone:
