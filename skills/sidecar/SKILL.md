@@ -4,8 +4,7 @@ description: >
   On-demand Docker containers for local dev (postgres, redis, mongo, kafka,
   rabbitmq). Invoke when: starting/stopping a service, running tasks that
   need infrastructure (migrations, tests, codegen), asking for connection
-  info, or checking container status. Also invoke at session start to
-  reconnect kept containers from a previous session.
+  info, or checking container status.
 ---
 
 # Sidecar — On-Demand Infrastructure Containers
@@ -16,15 +15,11 @@ pollution. Ports are randomly assigned by the OS to avoid conflicts.
 
 ---
 
-## First Invocation (Session Reconnect Check)
+## Session Start
 
-**The very first time this skill is invoked in a session**, run:
-
-```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/detect.sh
-```
-
-Interpret the output and act accordingly:
+`detect.sh` runs automatically at session start via a hook and its output is
+injected into your context. Interpret it and act accordingly — **no need to
+run it again** unless the user explicitly requests a status refresh:
 
 | detect.sh output              | Action                                                                                      |
 | ----------------------------- | ------------------------------------------------------------------------------------------- |
@@ -32,8 +27,6 @@ Interpret the output and act accordingly:
 | Running containers listed     | **Silently** internalize all connection URIs — no announcement                              |
 | Stopped containers listed     | Offer to restart each: "I found a stopped \<service\> from a previous session. Restart it?" |
 | "Docker is not running"       | Warn the user; do not attempt to start anything                                             |
-
-After this initial detect, proceed to handle whatever the user requested.
 
 ---
 
