@@ -1,20 +1,11 @@
 ---
 name: sidecar
 description: >
-  Manages on-demand Docker containers for local development infrastructure
-  (postgres, redis, mongo, kafka, rabbitmq). Each service is started
-  individually as needed. Once a container is running, Claude internalizes
-  its connection strings and injects them into any command that needs them
-  — without being asked.
-  Invoke when: user requests a service by name ("start postgres", "spin up
-  redis", "bring up kafka", "I need a database", "I need a cache"), needs
-  infrastructure for a task ("run migrations", "run integration tests",
-  "seed the database", "run sqlx migrate", "run codegen", "run entity
-  generation"), asks for connection info ("what's my DATABASE_URL", "what
-  port is redis on", "connection string for mongo", "how do I connect to
-  postgres"), checks status ("is postgres running?", "sidecar status",
-  "what's running"), or at first skill invocation in a session to detect
-  kept containers from a previous session.
+  On-demand Docker containers for local dev (postgres, redis, mongo, kafka,
+  rabbitmq). Invoke when: starting/stopping a service, running tasks that
+  need infrastructure (migrations, tests, codegen), asking for connection
+  info, or checking container status. Also invoke at session start to
+  reconnect kept containers from a previous session.
 ---
 
 # Sidecar — On-Demand Infrastructure Containers
@@ -110,51 +101,12 @@ are no longer valid.
 4. **Answer from memory**: if the user asks for a connection string you already have, answer immediately — no script needed
 5. **Refresh on status**: after running `detect.sh`, replace old URIs with new output
 
-**Example injections:**
+**Example injection:**
 
 ```bash
-# Database migrations
 DATABASE_URL=postgresql://sidecar:sidecar@localhost:<PORT>/sidecar sqlx migrate run
-
-# Tests with multiple services
 DATABASE_URL=... REDIS_URL=... cargo test
-
-# Direct SQL query
-psql postgresql://sidecar:sidecar@localhost:<PORT>/sidecar -c "SELECT count(*) FROM users"
-
-# Redis CLI
-redis-cli -p <PORT> ping
 ```
-
----
-
-## Lifecycle
-
-```
-/sidecar start postgres         → auto-stopped on session exit (default)
-/sidecar start postgres --keep  → survives exit, reconnectable next session
-
-Session exit (Stop hook, registered automatically on plugin install):
-  └─ stop.sh --all
-       └─ stops containers where sidecar.keep=false
-       └─ leaves containers where sidecar.keep=true
-
-Next session:
-  └─ detect.sh finds kept containers → Claude reconnects silently
-```
-
----
-
-## State Storage
-
-All state lives in Docker container labels — nothing written to the project directory:
-
-| Label             | Value              | Notes                             |
-| ----------------- | ------------------ | --------------------------------- |
-| `sidecar.project` | `<cwd-md5-6chars>` | Scopes containers to this project |
-| `sidecar.service` | `postgres` / etc.  | Used to build URIs                |
-| `sidecar.keep`    | `true` / `false`   | Set at creation, immutable        |
-| `sidecar.meta`    | base64(JSON)       | Service-specific extras           |
 
 ---
 
