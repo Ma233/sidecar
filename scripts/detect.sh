@@ -1,17 +1,19 @@
 #!/usr/bin/env bash
 # sidecar plugin: scripts/detect.sh
-set -euo pipefail
+# Hook script: exits with 0 so Claude sessions start cleanly, even on error.
+set -uo pipefail
 
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 PROJECT_HASH=$(printf '%s' "${CLAUDE_PROJECT_DIR:-$PWD}" | md5sum | cut -c1-6)
 
+# Docker not installed or not running — report but don't fail in hook context.
+if ! command -v docker &>/dev/null || ! docker info &>/dev/null; then
+  echo "[sidecar/detect] Docker is not running."
+  exit 0
+fi
+
 echo "[sidecar/detect] Project: $(basename "$PWD") (hash: $PROJECT_HASH)"
 echo ""
-
-if ! docker info &>/dev/null; then
-  echo "[sidecar/detect] Docker is not running."
-  exit 1
-fi
 
 RUNNING=$(docker ps \
   --filter "label=sidecar.project=${PROJECT_HASH}" \
@@ -19,6 +21,7 @@ RUNNING=$(docker ps \
 
 STOPPED=$(docker ps -a --filter "status=exited" \
   --filter "label=sidecar.project=${PROJECT_HASH}" \
+  --filter "label=sidecar.keep=true" \
   --format '{{.Names}}' 2>/dev/null || true)
 
 if [[ -z "$RUNNING" && -z "$STOPPED" ]]; then

@@ -13,6 +13,16 @@ if [[ -z "$SERVICE" ]]; then
   exit 1
 fi
 
+# Check dependencies before doing any work.
+if ! command -v docker &>/dev/null; then
+  echo "[sidecar] Docker is not installed. Please install Docker and try again." >&2
+  exit 1
+fi
+if ! docker info &>/dev/null; then
+  echo "[sidecar] Docker is not running. Please start Docker and try again." >&2
+  exit 1
+fi
+
 PROJECT_HASH=$(printf '%s' "${CLAUDE_PROJECT_DIR:-$PWD}" | md5sum | cut -c1-6)
 
 case "$SERVICE" in
@@ -110,6 +120,7 @@ case "$SERVICE" in
 
   rabbitmq)
     docker run -d --name "$CONTAINER_NAME" "${COMMON[@]}" \
+      --label "sidecar.meta=$(echo "${META_JSON}" | base64 -w0)" \
       -e RABBITMQ_DEFAULT_USER=sidecar -e RABBITMQ_DEFAULT_PASS=sidecar \
       -p 0:5672 -p 0:15672 \
       --health-cmd "rabbitmq-diagnostics -q ping" \

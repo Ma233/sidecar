@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
 # sidecar plugin: scripts/stop.sh <service|--all> [--force]
-# Also used as the Claude Code Stop hook: stop.sh --all
-set -euo pipefail
+# Also used as the Claude Code SessionEnd hook: stop.sh --all
+# Hook script: failures are silenced so Claude sessions end cleanly.
+set -uo pipefail
 
 TARGET="${1:-}"
 FORCE=false
 [[ "${2:-}" == "--force" ]] && FORCE=true
 
 PROJECT_HASH=$(printf '%s' "${CLAUDE_PROJECT_DIR:-$PWD}" | md5sum | cut -c1-6)
+
+# Docker not installed or not running — nothing to stop, exit silently.
+if ! command -v docker &>/dev/null || ! docker info &>/dev/null; then
+  exit 0
+fi
 
 stop_one() {
   local name="$1"
