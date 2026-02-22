@@ -32,7 +32,7 @@ Or install from a local clone:
 claude plugin install /path/to/sidecar
 ```
 
-The Stop hook is registered automatically on install — no manual setup needed.
+The SessionStart and SessionEnd hooks are registered automatically on install — no manual setup needed.
 
 ## Usage
 
@@ -109,12 +109,12 @@ DATABASE_URL=... REDIS_URL=redis://localhost:63791 cargo test
 ```
 sidecar/
 ├── .claude-plugin/
-│   └── plugin.json          # plugin manifest (skills + Stop hook)
+│   └── plugin.json          # plugin manifest (name, version, skills)
 ├── skills/
 │   └── sidecar/
 │       └── SKILL.md         # Claude skill instructions
 ├── hooks/
-│   └── hooks.json           # Stop → stop.sh --all
+│   └── hooks.json           # SessionStart → detect.sh; SessionEnd → stop.sh --all
 ├── scripts/
 │   ├── start.sh             # docker run per service, waits for healthy
 │   ├── stop.sh              # stops containers; respects sidecar.keep
