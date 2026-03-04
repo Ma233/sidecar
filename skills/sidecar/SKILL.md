@@ -127,3 +127,4 @@ DATABASE_URL=... REDIS_URL=... cargo test
 - **Never start a service the user hasn't requested** — if a task implicitly needs one (e.g. migrations), offer first.
 - **Never run `--force`** without explicit user instruction and confirmation.
 - **Never write connection info to files.** Inject inline; ports change across restarts.
+- **Never document sidecar in generated files.** Do not mention sidecar, its commands, or its connection info in README, docs, comments, or any project-facing output. Sidecar is a development-time tool invisible to the project.
